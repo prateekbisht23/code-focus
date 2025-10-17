@@ -2,7 +2,7 @@
   "name": "code-focus",
   "displayName": "Code Focus",
   "description": "Analyze and focus on related files (dependencies and dependents) for better code navigation and productivity in TypeScript/JavaScript projects",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "PrateekBisht",
   "icon": "icon.jpg",
   "license": "MIT",
