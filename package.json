@@ -1,0 +1,79 @@
+{
+  "name": "focus",
+  "displayName": "Code Focus",
+  "description": "Focus on related files in your codebase for better code navigation and productivity",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.105.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "focus.start",
+        "title": "Focus on Related Files"
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "focus.start",
+          "group": "navigation",
+          "when": "resourceExtname == .ts || resourceExtname == .tsx || resourceExtname == .js || resourceExtname == .jsx"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "codeFocus",
+          "name": "Code Focus",
+          "when": "config.focus.showView",
+          "icon": "$(symbol-class)"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Code Focus",
+      "properties": {
+        "focus.showView": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show the Code Focus view in the Explorer panel"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "webpack",
+    "watch": "webpack --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "npm run compile-tests && npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "dependencies": {
+    "typescript": "^5.9.2"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.105.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "@typescript-eslint/eslint-plugin": "^8.42.0",
+    "@typescript-eslint/parser": "^8.42.0",
+    "eslint": "^9.34.0",
+    "typescript": "^5.9.2",
+    "ts-loader": "^9.5.4",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1",
+    "@vscode/test-cli": "^0.0.11",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
