@@ -5,6 +5,7 @@
   "version": "1.0.1",
   "publisher": "PrateekBisht",
   "icon": "icon.jpg",
+  "license": "MIT",
   "author": {
     "name": "Prateek Bisht",
     "email": "prateekbisht.dev@gmail.com"
@@ -42,7 +43,7 @@
     "code organization"
   ],
   "engines": {
-    "vscode": "^1.105.0"
+    "vscode": "^1.74.0"
   },
   "categories": [
     "Other"
