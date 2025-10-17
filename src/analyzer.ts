@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as ts from 'typescript';
 import * as path from 'path';
+import * as fs from 'fs';
 
 /**
  * Analyzes a focal file to find all related files (dependencies and dependents)
@@ -9,11 +10,16 @@ import * as path from 'path';
  */
 export async function analyzeFile(focalFileUri: vscode.Uri): Promise<vscode.Uri[]> {
     try {
+        console.log('🔍 Analyzing file:', vscode.workspace.asRelativePath(focalFileUri));
+
         // Execute both dependency and dependent analysis in parallel for better performance
         const [dependencies, dependents] = await Promise.all([
             getDependencies(focalFileUri),
             getDependents(focalFileUri)
         ]);
+
+        console.log('📦 Found dependencies:', dependencies.map(uri => vscode.workspace.asRelativePath(uri)));
+        console.log('🔗 Found dependents:', dependents.map(uri => vscode.workspace.asRelativePath(uri)));
 
         // Combine all related files: the focal file itself, its dependencies, and its dependents
         const allRelatedFiles = [focalFileUri, ...dependencies, ...dependents];
@@ -22,6 +28,8 @@ export async function analyzeFile(focalFileUri: vscode.Uri): Promise<vscode.Uri[
         const uniqueFiles = Array.from(
             new Set(allRelatedFiles.map(uri => uri.toString()))
         ).map(uriString => vscode.Uri.parse(uriString));
+
+        console.log('✅ Total unique related files:', uniqueFiles.length, uniqueFiles.map(uri => vscode.workspace.asRelativePath(uri)));
 
         return uniqueFiles;
     } catch (error) {
@@ -67,14 +75,37 @@ async function getDependencies(fileUri: vscode.Uri): Promise<vscode.Uri[]> {
                             // Resolve the relative path to an absolute path
                             let resolvedPath = path.resolve(fileDir, importPath);
 
-                            // Add .ts or .tsx extension if no extension is present
-                            if (!path.extname(resolvedPath)) {
-                                // Try .ts first, then .tsx
-                                const tsPath = resolvedPath + '.ts';
-                                const tsxPath = resolvedPath + '.tsx';
+                            console.log(`🔍 Resolving import: ${importPath} -> ${resolvedPath}`);
 
-                                // For now, assume .ts (in a real implementation, you'd check which file exists)
-                                resolvedPath = tsPath;
+                            // Add extension if no extension is present
+                            if (!path.extname(resolvedPath)) {
+                                // Try different extensions in order of preference
+                                const extensions = ['.ts', '.tsx', '.js', '.jsx'];
+                                let foundPath = null;
+
+                                for (const ext of extensions) {
+                                    const testPath = resolvedPath + ext;
+                                    try {
+                                        // Check if file exists by trying to create a URI and access it
+                                        const testUri = vscode.Uri.file(testPath);
+                                        // Use synchronous existence check for now
+                                        if (fs.existsSync(testPath)) {
+                                            foundPath = testPath;
+                                            console.log(`✅ Found file: ${foundPath}`);
+                                            break;
+                                        }
+                                    } catch {
+                                        // File doesn't exist, continue to next extension
+                                    }
+                                }
+
+                                if (foundPath) {
+                                    resolvedPath = foundPath;
+                                } else {
+                                    // Default to .ts if no file is found
+                                    resolvedPath = resolvedPath + '.ts';
+                                    console.log(`⚠️ No file found, defaulting to: ${resolvedPath}`);
+                                }
                             }
 
                             // Convert to vscode.Uri and add to dependencies
@@ -94,6 +125,8 @@ async function getDependencies(fileUri: vscode.Uri): Promise<vscode.Uri[]> {
         // Start the AST traversal
         visit(sourceFile);
 
+        console.log(`📦 Dependencies found for ${vscode.workspace.asRelativePath(fileUri)}:`, dependencies.map(uri => vscode.workspace.asRelativePath(uri)));
+
         return dependencies;
     } catch (error) {
         console.error('Error getting dependencies for file:', fileUri.fsPath, error);
@@ -108,11 +141,15 @@ async function getDependencies(fileUri: vscode.Uri): Promise<vscode.Uri[]> {
  */
 async function getDependents(focalFileUri: vscode.Uri): Promise<vscode.Uri[]> {
     try {
+        console.log('🔍 Looking for dependents of:', vscode.workspace.asRelativePath(focalFileUri));
+
         // Find all TypeScript files in the workspace, excluding node_modules
         const allFiles = await vscode.workspace.findFiles(
-            '**/*.{ts,tsx}',
+            '**/*.{ts,tsx,js,jsx}',
             '**/node_modules/**'
         );
+
+        console.log(`📁 Found ${allFiles.length} files to check for dependents`);
 
         const dependents: vscode.Uri[] = [];
         const focalFilePath = focalFileUri.fsPath;
@@ -152,14 +189,26 @@ async function getDependents(focalFileUri: vscode.Uri): Promise<vscode.Uri[]> {
                                 try {
                                     let resolvedPath = path.resolve(fileDir, importPath);
 
-                                    // Add .ts extension if no extension is present
-                                    if (!path.extname(resolvedPath)) {
-                                        resolvedPath = resolvedPath + '.ts';
-                                    }
+                                    console.log(`🔍 Checking if ${vscode.workspace.asRelativePath(fileUri)} imports focal file via: ${importPath} -> ${resolvedPath}`);
 
-                                    // Check if this resolved path matches our focal file
-                                    if (path.normalize(resolvedPath) === path.normalize(focalFilePath)) {
-                                        importsTarget = true;
+                                    // Add appropriate extension if no extension is present
+                                    if (!path.extname(resolvedPath)) {
+                                        // Try different extensions to match the focal file
+                                        const extensions = ['.ts', '.tsx', '.js', '.jsx'];
+                                        for (const ext of extensions) {
+                                            const testPath = resolvedPath + ext;
+                                            if (path.normalize(testPath) === path.normalize(focalFilePath)) {
+                                                console.log(`✅ Found dependent: ${vscode.workspace.asRelativePath(fileUri)} imports focal file`);
+                                                importsTarget = true;
+                                                break;
+                                            }
+                                        }
+                                    } else {
+                                        // Has extension, direct comparison
+                                        if (path.normalize(resolvedPath) === path.normalize(focalFilePath)) {
+                                            console.log(`✅ Found dependent: ${vscode.workspace.asRelativePath(fileUri)} imports focal file`);
+                                            importsTarget = true;
+                                        }
                                     }
                                 } catch (error) {
                                     // Ignore resolution errors for individual imports
