@@ -25,8 +25,12 @@ export class FocusViewProvider implements vscode.TreeDataProvider<vscode.Uri> {
      * @returns A configured TreeItem that opens the file when clicked
      */
     getTreeItem(element: vscode.Uri): vscode.TreeItem {
+        // Use just the filename for display, not the full path
+        const fileName = element.path.split('/').pop() || 'Unknown';
+        const relativePath = vscode.workspace.asRelativePath(element);
+
         const treeItem = new vscode.TreeItem(
-            vscode.workspace.asRelativePath(element),
+            fileName,
             vscode.TreeItemCollapsibleState.None
         );
 
@@ -40,8 +44,8 @@ export class FocusViewProvider implements vscode.TreeDataProvider<vscode.Uri> {
         // Set appropriate icon based on file type
         treeItem.iconPath = vscode.ThemeIcon.File;
 
-        // Add tooltip with full file path
-        treeItem.tooltip = element.fsPath;
+        // Add tooltip with full relative path for context
+        treeItem.tooltip = relativePath;
 
         // Set resource URI for proper file icon display
         treeItem.resourceUri = element;
