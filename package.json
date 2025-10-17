@@ -1,8 +1,46 @@
 {
-  "name": "focus",
+  "name": "code-focus",
   "displayName": "Code Focus",
-  "description": "Focus on related files in your codebase for better code navigation and productivity",
-  "version": "0.0.1",
+  "description": "Analyze and focus on related files (dependencies and dependents) for better code navigation and productivity in TypeScript/JavaScript projects",
+  "version": "1.0.0",
+  "publisher": "PrateekBisht",
+  "icon": "icon.jpg",
+  "author": {
+    "name": "Prateek Bisht",
+    "email": "prateekbisht.dev@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/prateekbisht23/code-focus.git"
+  },
+  "bugs": {
+    "url": "https://github.com/prateekbisht23/code-focus/issues"
+  },
+  "homepage": "https://github.com/prateekbisht23/code-focus#readme",
+  "keywords": [
+    "typescript",
+    "javascript",
+    "dependencies",
+    "imports",
+    "navigation",
+    "code analysis",
+    "productivity",
+    "focus",
+    "code",
+    "code-focus",
+    "vscode-extension",
+    "developer tools",
+    "code explorer",
+    "related files",
+    "code relationships",
+    "file analysis",
+    "code structure",
+    "code insights",
+    "code navigation",
+    "code management",
+    "code visualization",
+    "code organization"
+  ],
   "engines": {
     "vscode": "^1.105.0"
   },
