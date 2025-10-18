@@ -14,28 +14,29 @@ This eliminates the need to manually search through the project structure or use
 
 ## How It Works
 
-1. **Right-click** any `.ts`, `.tsx`, `.js`, or `.jsx` file in VS Code Explorer
-2. Select **"Focus on Related Files"**
-3. View all related files organized in the **Code Focus** panel:
-   - **Dependencies**: Files imported by your selected file
-   - **Dependents**: Files that import your selected file
-   - **Focal File**: The file you're analyzing
+### Method 1: Right-click Context Menu
 
-## Example
+Right-click any `.ts`, `.tsx`, `.js`, or `.jsx` file in VS Code Explorer and select **"Focus on Related Files"**.
 
-Analyzing `UserProfile.tsx`:
+![Context Menu Usage](images/context-menu.png)
 
-```
-📁 Code Focus
-├── 📄 UserProfile.tsx (focal file)
-├── 📂 Dependencies (3)
-│   ├── Avatar.tsx
-│   ├── Button.tsx
-│   └── useUser.ts
-└── 📂 Dependents (2)
-    ├── Dashboard.tsx
-    └── Settings.tsx
-```
+### Method 2: Command Palette
+
+Use `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux), then type "Focus on Related Files".
+
+![Command Palette Usage](images/command-palette.png)
+
+## What You'll See
+
+After running the command, a **Code Focus** panel will appear in the Explorer showing all related files organized by their relationship to your selected file.
+
+![Code Focus Panel](images/code-focus-panel.png)
+
+The panel displays:
+
+- **Dependencies**: Files imported by your selected file
+- **Dependents**: Files that import your selected file
+- **Focal File**: The file you're analyzing
 
 Click any file in the focus view to open it instantly.
 
