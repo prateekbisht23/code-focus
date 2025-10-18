@@ -74,6 +74,4 @@ Click any file in the focus view to open it instantly.
 
 **Created by [Prateek Bisht](https://github.com/prateekbisht23)** | [Report Issues](https://github.com/prateekbisht23/code-focus/issues)
 
-```
-
-```
+---
