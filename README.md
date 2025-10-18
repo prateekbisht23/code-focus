@@ -18,19 +18,19 @@ This eliminates the need to manually search through the project structure or use
 
 Right-click any `.ts`, `.tsx`, `.js`, or `.jsx` file in VS Code Explorer and select **"Focus on Related Files"**.
 
-![Context Menu Usage](images/context-menu.png)
+<img src="images/context-menu.png" alt="Context Menu Usage" width="400"/>
 
 ### Method 2: Command Palette
 
 Use `Cmd+Shift+P` (macOS) or `Ctrl+Shift+P` (Windows/Linux), then type "Focus on Related Files".
 
-![Command Palette Usage](images/command-palette.png)
+<img src="images/command-palette.png" alt="Context Menu Usage" height="400"/>
 
 ## What You'll See
 
 After running the command, a **Code Focus** panel will appear in the Explorer showing all related files organized by their relationship to your selected file.
 
-![Code Focus Panel](images/code-focus-panel.png)
+<img src="images/code-focus-panel.png" alt="Context Menu Usage" width="400"/>
 
 The panel displays:
 
