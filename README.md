@@ -1,6 +1,6 @@
 # Code Focus
 
-[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/prateekbisht23.code-focus)](https://marketplace.visualstudio.com/items?itemName=prateekbisht23.code-focus)
+[![Visual Studio Marketplace Version](https://img.shields.io/visual-studio-marketplace/v/prateekbisht23.code-focus)](https://marketplace.visualstudio.com/items?itemName=prateekbisht.code-focus)
 [![Visual Studio Marketplace Downloads](https://img.shields.io/visual-studio-marketplace/d/prateekbisht23.code-focus)](https://marketplace.visualstudio.com/items?itemName=prateekbisht23.code-focus)
 [![GitHub License](https://img.shields.io/github/license/prateekbisht23/code-focus)](LICENSE)
 
